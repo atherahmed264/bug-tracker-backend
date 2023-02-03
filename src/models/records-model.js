@@ -42,17 +42,13 @@ const recordSchema = new mongoose.Schema({
         ref:'End-Users',
         required:true
     },
-    StartDate:{
-        type:Date
-    },
-    EndDate:{
-        type:Date
-    },
-    Efforts:{
-        type:Number
-    },
-    CompletedEfforts:{
-        type:Number
+    StartDate:Date,
+    EndDate:Date,
+    Efforts:Number,
+    CompletedEfforts:Number,
+    OwnerId:{
+        type:String,
+        default:"639ca034da10173255153d65"
     }
 });
 

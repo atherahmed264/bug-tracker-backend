@@ -28,7 +28,7 @@ exports.getRecordsList = catchAsync( async (req,res,next) => {
     let defaultSearch = isNaN(req.body.searchText) ? "Title" : "RecordNumber";
     let obj = {
         isFilter : true,
-        allowed:["AssignedTo","CreatedBy","Status","Type"],
+        allowed:["AssignedTo","CreatedBy","Status","Type","OwnerId"],
         body : req.body,
         Model : Records,
         defaultSearch,

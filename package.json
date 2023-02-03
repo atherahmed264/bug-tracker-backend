@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm test",
     "start": "nodemon src/index.js",
-    "debug": "ndb src/index.js"
+    "debug": "ndb src/index.js",
+    "run-src":"node src/db-script.js"
   },
   "author": "Ather Ahmed",
   "license": "ISC",

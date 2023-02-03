@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-
+const script = require('./db-script');
 const app = require('./app.js');
 dotenv.config({ path:`${__dirname}/envariables.env`});
 
@@ -14,6 +14,7 @@ mongoose.connect(url,{
 })
 .then((con) => {
     console.log("DataBase connected");
+    script.script();
 })
 .catch( err => {
     console.log("error occured while connecting database",err);

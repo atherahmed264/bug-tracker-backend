@@ -2,6 +2,7 @@
 
 async function AdvanceLookup(input, next) {
     let query;
+    console.log(input);
     try {
         let searchText = input.body.searchText;
         let page = +input.body.page;
@@ -27,7 +28,7 @@ async function AdvanceLookup(input, next) {
             let allowedfilter = input.isFilter ? input.allowed : [];
             let filterObj = input.body.filter || "";
             let valid = filter ? filter.every(val => allowedfilter.includes(val)) : false;
-            console.log(filter,valid);
+            console.log("uuu",filter,valid);
             if (filter && filter.length && valid) {
                 let arr = [];
 

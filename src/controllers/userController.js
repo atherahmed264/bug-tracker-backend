@@ -122,7 +122,7 @@ exports.advanceLookupUser = catchAsync( async (req,res,next) => {
         select
     }
     let page = +req.body.page;
-    let total = await User.countDocuments(); 
+    let OverallTotal = await User.countDocuments(); 
     let [query,restotal] = await advanceLookup(obj,next);
     let data = await query;
     res.status(200).json({
@@ -130,6 +130,6 @@ exports.advanceLookupUser = catchAsync( async (req,res,next) => {
         data,
         requestedPage:page,
         restotal,
-        total
+        OverallTotal
     });
 });
