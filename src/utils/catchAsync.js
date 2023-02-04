@@ -28,7 +28,7 @@ async function AdvanceLookup(input, next) {
             let allowedfilter = input.isFilter ? input.allowed : [];
             let filterObj = input.body.filter || "";
             let valid = filter ? filter.every(val => allowedfilter.includes(val)) : false;
-            console.log("uuu",filter,valid);
+
             if (filter && filter.length && valid) {
                 let arr = [];
 
@@ -59,6 +59,18 @@ async function AdvanceLookup(input, next) {
                     delete obj['$and'];
                 }
             }
+          
+            if(input.body.dateRange){
+                let [start,end] = input.body.dateRange.split("/");
+                console.log(new Date(start),end)
+                let query = {
+                    "CreatedAt":{
+                        $gt:new Date(start),
+                        $lt:new Date(end),
+                    }
+                }
+                obj['$and'].push(query);
+            }
         }
         
         if(input.sort && input.sortBy){
@@ -67,9 +79,8 @@ async function AdvanceLookup(input, next) {
         }
         console.log(JSON.stringify(obj),sort,'objjj');
         if(!input.isFilter && searchText === "") {
-
-            query = model.find().sort(sort);
-            var total = await model.countDocuments();
+            query = model.find().skip(skip).limit(limit);
+            var total = limit;
         }
         else{
             query = model.find(obj).sort(sort).skip(skip).limit(limit);

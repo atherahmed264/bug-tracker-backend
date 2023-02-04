@@ -8,7 +8,8 @@ async function AddUserOwnerID(){
     console.log(records);
     records.forEach(async(record,i) => {
         let index = i+1;
-        record.OwnerId = record.AssignedTo._id;
+        //record.OwnerId = record.AssignedTo._id;
+       //record.CreatedAt = new Date(record.CreatedAt);
         record.save().then(x => {
             console.log("saved",index);
         }).catch(err => {
