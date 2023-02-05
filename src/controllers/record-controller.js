@@ -8,7 +8,7 @@ const advanceLookup = util.advanceLookup;
 exports.addRecords = catchAsync( async (req,res,next) => {
     if(!req.body) next(new Err("No Payload",404));
     Records.countDocuments()
-
+    req.body.OwnerId = req.body.AssignedTo;
     req.body.RecordNumber = Date.now().toString().slice(-6);
     let data = await (await Records.create(req.body)).populate('AssignedTo');
     data = data.toObject();
@@ -51,7 +51,7 @@ exports.getRecordsList = catchAsync( async (req,res,next) => {
 exports.getRecordDetails = catchAsync( async (req,res,next) => {
     if(!req.body || !req.body.id) next(new Err('Payload not valid',404))
 
-    let data = await Records.findById(req.body.id).select('-__v').populate('AssignedTo');
+    let data = await Records.findById(req.body.id).select('-__v').populate('AssignedTo').populate('CreatedBy');
     if(!data) return next(new util.err("ID Not Found",404));
     res.status(200).json({
         message:"Success",
@@ -87,7 +87,7 @@ exports.deleteRecord = catchAsync( async (req,res,next) => {
 
 exports.editRecord  = catchAsync( async(req,res,next) => {
     if(Object.keys(req.body).length === 0 || !req.body.id) return next(new util.err("No Input",404));
-
+    req.body.OwnerId = req.body.AssignedTo;
     let id = req.body.id;
     let data = await (await Records.findByIdAndUpdate(id,req.body,{ runValidators:true,new:true})).populate('AssignedTo');
     res.status(200).json({
