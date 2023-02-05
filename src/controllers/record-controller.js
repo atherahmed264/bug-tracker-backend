@@ -1,9 +1,45 @@
 const Records = require('../models/records-model');
 const util = require('../utils/catchAsync');
+const multer = require('multer');
+//const multer = require('./../../public');
 
 const Err = util.err;
 const catchAsync = util.catchAsync;
 const advanceLookup = util.advanceLookup;
+
+const options = multer.diskStorage({
+    destination:(req,file,cb) => {
+        console.log("f",file);
+        cb(null,'D:/1.preparation/bug tracker backend/public/img');
+    },
+    filename:(req,file,cb) => {
+        let type = file.mimetype.split('/')[1];
+        if(type.includes('octet')) type = 'jpeg'
+        let name = `${file.originalname.split(".")[0]}-${Date.now()}.${type}`;
+        cb(null,name);
+    }
+})
+const upload = multer({ storage:options });
+exports.multer = upload;
+
+exports.uploadFile = catchAsync( async (req,res,next) => {
+    console.log(req.file);
+    if(!req.params.id || !req.file) return next(new Err("No File or Id Found",400));
+    let name = req.file.filename;
+    let data = await Records.findById(req.params.id).select('Attachments');
+    data.Attachments.push(name);
+    await data.save();
+    if(data){
+        res.status(200).json({
+            message:'success',
+            data
+        });
+    }
+    else{
+        next( new Err("Something went wrong",500));
+    }
+})
+
 
 exports.addRecords = catchAsync( async (req,res,next) => {
     if(!req.body) next(new Err("No Payload",404));

@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 
 const userRouter = require('./routes/userRoutes');
 const commentRouter = require('./routes/commentRoute');
@@ -15,7 +16,8 @@ app.use(xss());
 app.options('*', cors()); 
 app.use(helmet());
 app.use(express.json());
-app.use(express.static(`${__dirname}/public`)) // to send static files present in public folder like images,html etc
+console.log(path.join(__dirname,"/public"))
+app.use(express.static(path.join(__dirname,"/public"))) // to send static files present in public folder like images,html etc
 app.use(morgan('dev'));
 
 let limiter = rateLimit({

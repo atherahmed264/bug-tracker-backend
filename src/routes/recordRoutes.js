@@ -9,5 +9,6 @@ route.post("/details",records.getRecordDetails);
 route.delete('/',records.deleteRecord);
 route.post('/advancelookup',records.advanceLookup);
 route.post('/edit',records.editRecord);
+route.post('/upload/:id',records.multer.single('document'),records.uploadFile);
 
 module.exports = route;
