@@ -10,7 +10,7 @@ const advanceLookup = util.advanceLookup;
 const options = multer.diskStorage({
     destination:(req,file,cb) => {
         console.log("f",file);
-        cb(null,'D:/1.preparation/bug tracker backend/public/img');
+        cb(null,'./src/public/img');
     },
     filename:(req,file,cb) => {
         let type = file.mimetype.split('/')[1];
