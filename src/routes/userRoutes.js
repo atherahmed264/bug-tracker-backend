@@ -9,5 +9,6 @@ router.post('/delete',user.deleteUser);
 router.post('/login',user.login);
 router.patch('/update',user.updateUser);
 router.post('/advancelookup',user.advanceLookupUser);
+router.post('/uploadpic/:id',user.multer.single('document'),user.uploadImage);
 
 module.exports = router;

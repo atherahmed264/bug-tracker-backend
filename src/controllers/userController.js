@@ -1,8 +1,60 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const multer = require('multer');
+const fs = require('fs');
 const {catchAsync , err ,advanceLookup } = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
+
+let options = multer.diskStorage({
+    destination:(req,file,cb) => {
+        console.log('fie',file);
+        cb(null,'./src/public/img');
+    },
+    filename:(req,file,cb) => {
+        let name = file.originalname.split('.')[0];
+        let type = file.mimetype.includes('octet') ? 'jpeg' : file.mimetype.split('/')[1];
+        cb(null,`${name}-${Date.now()}.${type}`);
+    }
+})
+exports.multer = multer({ storage:options});
+
+exports.uploadImage = catchAsync( async(req,res,next) => {
+    if(!req.file || !req.params.id) next(new err("No Inputs Found",400));
+    console.log('id',req.params.id);
+    let data = await User.findById(req.params.id);
+    data.ProfilePhoto = req.file.filename;
+    await data.save();
+    fs.readFile('./src/public/img/'+req.file.filename, { encoding:'base64'},(err,data64) => {
+        if(err){
+            return next(new err('Some Error Occurred while reading file',500));
+        }
+
+        res.status(200).json({
+            message:'Success',
+            base64String:data64
+        })
+    });
+
+})
+
+exports.getDocumentBase64 = catchAsync( async(req,res,next) => {
+    if(!req.DocumentName){
+        return next(new err("NO Input Found"),400);
+    }
+
+    fs.readFile('./src/public/img/'+req.DocumentName,{ encoding:'base64'},(err,data) => {
+        if(!data){
+            next(new err('No Data Found'),400);
+            return;
+        }
+
+        res.status(200).json({
+            message:'success',
+            name:req.DocumentName,
+            base64String:data
+        });
+    })
+})
 
 exports.signup = catchAsync( async (req,res,next) => {
     if(req.body){
