@@ -34,3 +34,7 @@ process.on('unhandledRejection',() => {
     server.close();
     process.exit(1);
 });
+
+process.on('SIGTERM',() => {
+    server.close(); 
+})
