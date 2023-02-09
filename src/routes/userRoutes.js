@@ -10,5 +10,6 @@ router.post('/login',user.login);
 router.patch('/update',user.updateUser);
 router.post('/advancelookup',user.advanceLookupUser);
 router.post('/uploadpic/:id',user.multer.single('document'),user.uploadImage);
+router.post('/getdocument',user.getDocumentBase64);
 
 module.exports = router;

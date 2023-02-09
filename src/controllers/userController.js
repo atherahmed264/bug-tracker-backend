@@ -4,6 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const {catchAsync , err ,advanceLookup } = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
+const path = require('path')
 
 let options = multer.diskStorage({
     destination:(req,file,cb) => {
@@ -22,6 +23,12 @@ exports.uploadImage = catchAsync( async(req,res,next) => {
     if(!req.file || !req.params.id) next(new err("No Inputs Found",400));
     console.log('id',req.params.id);
     let data = await User.findById(req.params.id);
+    if(data.ProfilePhoto){
+        fs.unlink(global.img+'/img/'+data.ProfilePhoto,(err) => {
+            if(err) console.log('errr');
+            else console.log('file deleted');
+        })
+    }
     data.ProfilePhoto = req.file.filename;
     await data.save();
     fs.readFile(global.img+'/img/'+req.file.filename, { encoding:'base64'},(err,data64) => {
@@ -38,20 +45,28 @@ exports.uploadImage = catchAsync( async(req,res,next) => {
 })
 
 exports.getDocumentBase64 = catchAsync( async(req,res,next) => {
-    if(!req.DocumentName){
+    if(!req.body.DocumentName){
         return next(new err("NO Input Found"),400);
     }
-
-    fs.readFile(global.img+'/img/'+req.DocumentName,{ encoding:'base64'},(err,data) => {
+    console.log('global.img+req.body.DocumentName',global.img+'/img/'+req.body.DocumentName);
+    let exists = fs.existsSync(global.img+'/img/'+req.body.DocumentName);
+    if(!exists){
+        next(new err('No File Found in Server It may have been deleted'),400);
+        return;
+    }
+    fs.readFile(global.img+'/img/'+req.body.DocumentName,{ encoding:'base64'},(err,data) => {
         if(!data){
             next(new err('No Data Found'),400);
             return;
         }
-
+        if(err){
+            console.log(err);
+            return;
+        }
         res.status(200).json({
             message:'success',
-            name:req.DocumentName,
-            base64String:data
+            name:req.body.DocumentName,
+            base64String:data,
         });
     })
 })
