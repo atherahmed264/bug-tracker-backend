@@ -2,7 +2,6 @@ const Records = require('../models/records-model');
 const util = require('../utils/catchAsync');
 const multer = require('multer');
 //const multer = require('./../../public');
-
 const Err = util.err;
 const catchAsync = util.catchAsync;
 const advanceLookup = util.advanceLookup;
@@ -10,7 +9,7 @@ const advanceLookup = util.advanceLookup;
 const options = multer.diskStorage({
     destination:(req,file,cb) => {
         console.log("f",file);
-        cb(null,'./src/public/img');
+        cb(null,global.img+'/img');
     },
     filename:(req,file,cb) => {
         let type = file.mimetype.split('/')[1];

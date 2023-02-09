@@ -8,7 +8,7 @@ const User = require('./../models/userModel');
 let options = multer.diskStorage({
     destination:(req,file,cb) => {
         console.log('fie',file);
-        cb(null,'./src/public/img');
+        cb(null,global.img+'/img/');
     },
     filename:(req,file,cb) => {
         let name = file.originalname.split('.')[0];
@@ -24,7 +24,7 @@ exports.uploadImage = catchAsync( async(req,res,next) => {
     let data = await User.findById(req.params.id);
     data.ProfilePhoto = req.file.filename;
     await data.save();
-    fs.readFile('./src/public/img/'+req.file.filename, { encoding:'base64'},(err,data64) => {
+    fs.readFile(global.img+'/img/'+req.file.filename, { encoding:'base64'},(err,data64) => {
         if(err){
             return next(new err('Some Error Occurred while reading file',500));
         }
@@ -42,7 +42,7 @@ exports.getDocumentBase64 = catchAsync( async(req,res,next) => {
         return next(new err("NO Input Found"),400);
     }
 
-    fs.readFile('./src/public/img/'+req.DocumentName,{ encoding:'base64'},(err,data) => {
+    fs.readFile(global.img+'/img/'+req.DocumentName,{ encoding:'base64'},(err,data) => {
         if(!data){
             next(new err('No Data Found'),400);
             return;

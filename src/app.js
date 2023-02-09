@@ -25,7 +25,7 @@ let limiter = rateLimit({
     max:100,
     standardHeaders:true
 });
-
+global.img = path.join(__dirname,"/public");
 app.use(limiter);
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/comment",commentRouter);
