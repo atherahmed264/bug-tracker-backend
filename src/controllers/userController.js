@@ -167,7 +167,7 @@ exports.updateUser = catchAsync( async(req,res,next) => {
     }
     else if(req.body &&  req.body.id){
         let id = req.user?._id || req.body.id;
-        let data = await User.findByIdAndUpdate(id,req.body,{ returnDocument:true ,new: true , runValidators:true});
+        let data = await User.findByIdAndUpdate(id,req.body,{ returnDocument:true ,new: true , runValidators:true}).select('-Password -PasswordCreatedAt');
         res.status(200).json({
             message:"Success",
             data

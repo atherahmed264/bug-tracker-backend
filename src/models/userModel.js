@@ -7,6 +7,7 @@ let userSchema = new mongoose.Schema({
         required:[true,"User must have a Name"],
         minlength:5,
         maxlength:20,
+        unique:true
     },
     Name:{
         type:String,

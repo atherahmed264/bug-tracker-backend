@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const compression = require('compression');
 
 const userRouter = require('./routes/userRoutes');
 const commentRouter = require('./routes/commentRoute');
@@ -19,6 +20,7 @@ app.use(express.json());
 console.log(path.join(__dirname,"/public"))
 app.use(express.static(path.join(__dirname,"/public"))) // to send static files present in public folder like images,html etc
 app.use(morgan('dev'));
+app.use(compression());
 
 let limiter = rateLimit({
     windowMs:10 * 60 * 1000,
