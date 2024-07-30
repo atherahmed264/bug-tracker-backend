@@ -11,6 +11,7 @@ const compression = require('compression');
 const userRouter = require('./routes/userRoutes');
 const commentRouter = require('./routes/commentRoute');
 const recordRouter = require('./routes/recordRoutes');
+const taskRouter = require('./routes/taskRoute');
 
 app.use(cors());
 app.use(xss());
@@ -24,7 +25,7 @@ app.use(compression());
 
 let limiter = rateLimit({
     windowMs:10 * 60 * 1000,
-    max:100,
+    max:200,
     standardHeaders:true
 });
 global.img = path.join(__dirname,"/public");
@@ -32,7 +33,7 @@ app.use(limiter);
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/comment",commentRouter);
 app.use("/api/v1/record",recordRouter);
-
+app.use("/api/v1/tasks",taskRouter);
 
 app.use('*',(_req,_res,next) => next(new Error("Route not Found")));
 

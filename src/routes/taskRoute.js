@@ -1,5 +1,5 @@
 const express = require('express');
-const comment = require('./../controllers/comment-controller');
+const task = require('./../controllers/task-controller')
 const {authenticate} = require('./../controllers/auth-controller')
 
 const router = express.Router();
@@ -10,12 +10,10 @@ const router = express.Router();
 // router.get("/",comment.getComments);
 
 router.route('/')
-.post(comment.addComment)
-.get(comment.getComments)
-.patch(comment.editComment)
-.delete(comment.deleteComment)
-
-router.post('/list',comment.getCommentByRecord);
+.post(task.addTask)
+.get(task.getTasks)
+.patch(task.editTask)
+.delete(task.deleteTask)
 
 
 module.exports = router;
